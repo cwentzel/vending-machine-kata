@@ -64,7 +64,21 @@ describe("Vending Machine", function() {
             expect(result5).to.deep.equal({result:false,value:false});
         });
     });
+    describe("test coins", function() {
+        it("tests coins", function() {
+            var result1 = machine.checkCoin(nickel);
+            var result2 = machine.checkCoin(dime);
+            var result3 = machine.checkCoin(quarter);
+            var result4 = machine.checkCoin(fake);
+            var result5 = machine.checkCoin('sdfwe');
 
+            expect(result1).to.deep.equal({result:true,value:5});
+            expect(result2).to.deep.equal({result:true,value:10});
+            expect(result3).to.deep.equal({result:true,value:25});
+            expect(result4).to.deep.equal({result:false,value:false});
+            expect(result5).to.deep.equal({result:false,value:false});
+        });
+    });
 
 
 
