@@ -16,7 +16,20 @@ exports.checkWeight = function(coin){
 };
 
 exports.checkDiameter = function(coin){
-
-}
+    var rtn = {result:false,value:false};
+    if (coin.diameter == 21){
+        rtn.result = true;
+        rtn.value = 5;
+    }
+    else if (coin.diameter == 18){
+        rtn.result = true;
+        rtn.value = 10;
+    }
+    else if (coin.diameter == 24){
+        rtn.result = true;
+        rtn.value = 25;
+    }
+    return rtn;
+};
 
 
