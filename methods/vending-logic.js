@@ -15,4 +15,8 @@ exports.checkWeight = function(coin){
     return rtn;
 };
 
+exports.checkDiameter = function(coin){
+
+}
+
 

@@ -22,20 +22,50 @@ var quarter = {
     "weight" : "5.7",
     "diameter" : "24"
 }
+var fake = {
+    "name" : "fake",
+    "value_dec" : "0",
+    "value_int" : "0",
+    "weight" : "4.3",
+    "diameter" : "19"
+
+
+}
 
 describe("Vending Machine", function() {
     describe("weigh coins", function() {
-        it("weigh coins", function() {
+        it("weighs coins", function() {
             var result1 = machine.checkWeight(nickel);
             var result2 = machine.checkWeight(dime);
             var result3 = machine.checkWeight(quarter);
+            var result4 = machine.checkWeight(fake);
+            var result5 = machine.checkWeight("sldkcasd");
 
-            expect(result1).to.equal("5");
-            expect(result2).to.equal("10");
-            expect(result1).to.equal("25");
+            expect(result1).to.deep.equal({result:true,value:5});
+            expect(result2).to.deep.equal({result:true,value:10});
+            expect(result3).to.deep.equal({result:true,value:25});
+            expect(result4).to.deep.equal({result:false,value:false});
+            expect(result5).to.deep.equal({result:false,value:false})
 
         });
     });
+    describe("measure coins", function() {
+        it("measures coins", function() {
+            var result1 = machine.checkDiameter(nickel);
+            var result2 = machine.checkDiameter(dime);
+            var result3 = machine.checkDiameter(quarter);
+            var result4 = machine.checkDiameter(fake);
+            var result5 = machine.checkDiameter('sdfwe');
+
+            expect(result1).to.deep.equal({result:true,value:5});
+            expect(result2).to.deep.equal({result:true,value:10});
+            expect(result3).to.deep.equal({result:true,value:25});
+            expect(result4).to.deep.equal({result:false,value:false});
+            expect(result5).to.deep.equal({result:false,value:false});
+        });
+    });
+
+
 
 
 });
