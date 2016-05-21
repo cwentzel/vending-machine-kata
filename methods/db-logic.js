@@ -1,8 +1,6 @@
 var monk = require("monk");
 var db = monk('localhost:27017/vending-machine-db');
 
-
-
 exports.checkHold = function(coin){
     var hold = db.get('hold');
     var rtn = false;
@@ -13,4 +11,6 @@ exports.checkHold = function(coin){
     var doc = hold.findOne(query);
     return doc;
 };
+
+
 

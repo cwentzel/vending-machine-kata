@@ -1,5 +1,7 @@
 exports.checkWeight = function(coin){
-    var rtn = {result:false,value:false};
+    var rtn = {};
+    rtn.result = false;
+    rtn.value = false;
     if (coin.weight == 5){
         rtn.result = true;
         rtn.value = 5;
@@ -16,7 +18,9 @@ exports.checkWeight = function(coin){
 };
 
 exports.checkDiameter = function(coin){
-    var rtn = {result:false,value:false};
+    var rtn = {};
+    rtn.result = false;
+    rtn.value = false;
     if (coin.diameter == 21){
         rtn.result = true;
         rtn.value = 5;
@@ -39,12 +43,35 @@ exports.checkCoin = function(coin){
     rtn.value = false;
     weight = this.checkWeight(coin);
     diameter = this.checkDiameter(coin);
-    if (weight.result == true && diameter.result == true && weight.value == diameter.value){
+    if (weight.result === true && diameter.result === true && weight.value == diameter.value){
         rtn.result = true;
         rtn.value = weight.value
     }
-
     return rtn;
 };
+
+/*
+exports.coinInserted = function(coin){
+    var test,added;
+    var rtn = false;
+    test = this.checkCoin(coin);
+    if (test.result === true){
+        //add coin to bank
+        added = this.acceptCoin();
+        if (added === false){
+            //return coin
+        };
+    }
+    else{
+        //return coin
+    }
+
+
+
+
+
+
+};
+*/
 
 

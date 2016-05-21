@@ -1,5 +1,9 @@
-var expect    = require("chai").expect;
+var chai = require("chai");
+var expect = chai.expect;
+var chaiAsPromised = require("chai-as-promised");
 var machine = require("../methods/vending-logic.js");
+var database = require("../methods/db-logic.js");
+chai.use(chaiAsPromised);
 
 var nickel = {"name" : "nickel",
     "value_dec" : "0.05",
@@ -13,7 +17,7 @@ var dime = {
     "value_int" : "10",
     "weight" : "2.3",
     "diameter" : "18"
-}
+};
 
 var quarter = {
     "name" : "quarter",
@@ -21,16 +25,14 @@ var quarter = {
     "value_int" : "25",
     "weight" : "5.7",
     "diameter" : "24"
-}
+};
 var fake = {
     "name" : "fake",
     "value_dec" : "0",
     "value_int" : "0",
     "weight" : "4.3",
     "diameter" : "19"
-
-
-}
+};
 
 describe("Vending Machine", function() {
     describe("weigh coins", function() {
@@ -77,6 +79,16 @@ describe("Vending Machine", function() {
             expect(result3).to.deep.equal({result:true,value:25});
             expect(result4).to.deep.equal({result:false,value:false});
             expect(result5).to.deep.equal({result:false,value:false});
+        });
+    });
+    describe("check hold", function() {
+        it("should return a valid mongo object", function(){
+            var result1 = database.checkHold(nickel);
+            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
+        });
+        it("should return an object with a quantity property", function(){
+            var result1 = database.checkHold(nickel);
+            return expect(Promise.resolve(result1)).to.eventually.have.property("quantity");
         });
     });
 
