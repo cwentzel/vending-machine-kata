@@ -3,3 +3,34 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  #pocket.column
+    label Pocket
+    #penny.coin(data-weight="3.1")(data-diameter="15") 1
+    #nickel.coin(data-weight="5")(data-diameter="21") 5
+    #dime.coin(data-weight="2.3")(data-diameter="18") 10
+    #quarter.coin(data-weight="5.7")(data-diameter="24") 25
+    #slug.coin(data-weight="3.9")(data-diameter="20") X
+  #vending-machine.machine-container.column
+    #vending-machine-display.machine-row
+      #vending-display.machine-control.display Insert Coins
+    #vending-machine-coin-controls.machine-row
+      #coin-slot-container.machine-control
+        label Insert Coins Here
+        #coin-slot
+      #return-coins.machine-control Return Coins
+    #vending-machine-product-select.machine-row
+      #chips.machine-control.product-button CHIPS
+      #candy.machine-control.product-button CANDY
+      #cola.machine-control.product-button COLA
+    #vending-machine-delivery.machine-row
+      #coin-return-container.machine-control
+        label Coin Return
+        #coin-return
+      #product-dispense-container.machine-control
+        label Your Product
+        #product-dispense
+          #product.product
+  #backpack.column
+    label Backpack
+    #backpack-pocket
+

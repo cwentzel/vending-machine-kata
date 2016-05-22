@@ -1,0 +1,223 @@
+@default-black: #000;
+@default-gray-dark: #444;
+@default-gray-med: #888;
+@default-gray-light: #bbb;
+@default-white: #fff;
+@default-red: #f00;
+@default-green: #0f0;
+@default-blue: #00f;
+@default-copper: #b87333;
+@default-nickel: #b5b6b5;
+@default-silver: #C0C0C0;
+@default-orange-light: #ffc966;
+@default-orange-dark: #FF8000;
+@default-orange-darker: #FF6600;
+@default-blue: #ADD8E6;
+
+
+.column{
+  display: inline-block;
+  vertical-align: top;
+}
+
+#backpack{
+  background-color: @default-orange-light;
+  min-height: 600px;
+  min-width: 50px;
+  padding: 20px;
+  width: 10%;
+  #backpack-pocket{
+    background-color: @default-orange-dark;
+    border: 1px solid @default-black;
+    height: 500px;
+  }
+}
+
+.machine-row{
+  background-color: @default-gray-light;
+  border: 1px solid @default-black;
+  margin: 20px 0;
+  //border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+
+}
+.machine-control{
+  background-color: @default-gray-med;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.display{
+  background-color: @default-white;
+  box-sizing: border-box;
+  color: @default-black;
+  height: 50px;
+  font-size: 40px;
+  line-height: 40px;
+  padding: 5px 10px;
+  width: 400px;
+}
+
+.product-button{
+  background-color: @default-gray-dark;
+  color: @default-green;
+}
+
+#pocket {
+  background-color: @default-blue;
+  min-height: 600px;
+  min-width: 50px;
+  padding: 20px;
+  width: 10%;
+  .coin {
+    border: 1px solid @default-gray-dark;
+    cursor: grab;
+    margin: 20px;
+    text-align: center;
+  }
+}
+
+
+
+#vending-machine{
+  background-color: @default-red;
+  border: 1px solid @default-black;
+  min-height: 600px;
+  min-width: 600px;
+  padding: 20px;
+  width: 20%;
+}
+
+#vending-machine-display{
+
+}
+
+#vending-display{
+
+}
+
+
+#vending-machine-coin-controls{
+  text-align: center;
+  #coin-slot-container {
+    margin: 0 50px;
+    text-align: center;
+    label {
+      display: inline-block;
+      width: 100%;
+    }
+    #coin-slot {
+      background-color: @default-black;
+      box-sizing: border-box;
+      display: inline-block;
+      height: 100px;
+      width: 30px;
+    }
+  }
+  #return-coins{
+    background-color: @default-green;
+    border-radius: 50px;
+    cursor: pointer;
+    height: 100px;
+    line-height: 100px;
+    margin: 0 50px;
+    width: 100px;
+  }
+
+}
+
+
+#vending-machine-product-select{
+  .product-button{
+    background-color: @default-blue;
+    border: 1px solid @default-gray-dark;
+    border-radius: 5px;
+    color: @default-black;
+    cursor: pointer;
+    font-size: 20px;
+    height: 60px;
+    line-height: 60px;
+    width: 100px;
+    margin: 0 20px;
+    #chips{}
+    #candy{}
+    #cola{}
+  }
+}
+
+#vending-machine-delivery {
+  #coin-return-container {
+    #coin-return{
+      box-sizing: border-box;
+    background-color: @default-black;
+    height: 100px;
+    margin: 0 20px;
+    width: 100px;
+  }
+  }
+  #product-dispense-container {
+    #product-dispense {
+      background-color: @default-black;
+      height: 100px;
+      margin: 0 20px;
+      max-height: 100px;
+      width: 200px;
+      .product{
+        box-sizing: border-box;
+        display: inline-block;
+        background-color: @default-green;
+        height: 30px;
+        width: 30px;
+      }
+    }
+  }
+}
+
+
+
+.coin-hover{
+  border: 1px solid @default-red;
+  //transform: scale(1.2,1.2);
+}
+.product-hover{
+  background-color: @default-orange-darker !important;
+  //transform: scale(1.2,1.2);
+}
+
+#penny{
+  background-color: @default-copper;
+  border-radius: 15px;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+}
+#nickel{
+  background-color: @default-nickel;
+  border-radius: 21px;
+  height: 42px;
+  line-height: 42px;
+  width: 42px;
+}
+#dime{
+  background-color: @default-silver;
+  border-radius: 18px;
+  height: 36px;
+  line-height: 36px;
+  width: 36px;
+}
+#quarter{
+  background-color: @default-silver;
+  border-radius: 24px;
+  height: 48px;
+  line-height: 48px;
+  width: 48px;
+}
+#slug{
+  background-color: @default-gray-light;
+  border-radius: 20px;
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
+}
+

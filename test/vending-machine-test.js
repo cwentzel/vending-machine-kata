@@ -91,6 +91,16 @@ describe("Vending Machine", function() {
             return expect(Promise.resolve(result1)).to.eventually.have.property("quantity");
         });
     });
+    describe("add coin to hold",function(){
+        it("if coin inserted and valid, it should be added to hold", function(){
+            //working here , write test
+
+
+            var result1 = database.checkHold(nickel);
+            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
+        });
+    });
+
 
 
 

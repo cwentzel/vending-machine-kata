@@ -1,8 +1,164 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.column {
+  display: inline-block;
+  vertical-align: top;
 }
-
-a {
-  color: #00B7FF;
+#backpack {
+  background-color: #ffc966;
+  min-height: 600px;
+  min-width: 50px;
+  padding: 20px;
+  width: 10%;
+}
+#backpack #backpack-pocket {
+  background-color: #FF8000;
+  border: 1px solid #000;
+  height: 500px;
+}
+.machine-row {
+  background-color: #bbb;
+  border: 1px solid #000;
+  margin: 20px 0;
+  padding: 20px;
+  text-align: center;
+}
+.machine-control {
+  background-color: #888;
+  display: inline-block;
+  vertical-align: top;
+}
+.display {
+  background-color: #fff;
+  box-sizing: border-box;
+  color: #000;
+  height: 50px;
+  font-size: 40px;
+  line-height: 40px;
+  padding: 5px 10px;
+  width: 400px;
+}
+.product-button {
+  background-color: #444;
+  color: #0f0;
+}
+#pocket {
+  background-color: #ADD8E6;
+  min-height: 600px;
+  min-width: 50px;
+  padding: 20px;
+  width: 10%;
+}
+#pocket .coin {
+  border: 1px solid #444;
+  cursor: grab;
+  margin: 20px;
+  text-align: center;
+}
+#vending-machine {
+  background-color: #f00;
+  border: 1px solid #000;
+  min-height: 600px;
+  min-width: 600px;
+  padding: 20px;
+  width: 20%;
+}
+#vending-machine-coin-controls {
+  text-align: center;
+}
+#vending-machine-coin-controls #coin-slot-container {
+  margin: 0 50px;
+  text-align: center;
+}
+#vending-machine-coin-controls #coin-slot-container label {
+  display: inline-block;
+  width: 100%;
+}
+#vending-machine-coin-controls #coin-slot-container #coin-slot {
+  background-color: #000;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 100px;
+  width: 30px;
+}
+#vending-machine-coin-controls #return-coins {
+  background-color: #0f0;
+  border-radius: 50px;
+  cursor: pointer;
+  height: 100px;
+  line-height: 100px;
+  margin: 0 50px;
+  width: 100px;
+}
+#vending-machine-product-select .product-button {
+  background-color: #ADD8E6;
+  border: 1px solid #444;
+  border-radius: 5px;
+  color: #000;
+  cursor: pointer;
+  font-size: 20px;
+  height: 60px;
+  line-height: 60px;
+  width: 100px;
+  margin: 0 20px;
+}
+#vending-machine-delivery #coin-return-container #coin-return {
+  box-sizing: border-box;
+  background-color: #000;
+  height: 100px;
+  margin: 0 20px;
+  width: 100px;
+}
+#vending-machine-delivery #product-dispense-container #product-dispense {
+  background-color: #000;
+  height: 100px;
+  margin: 0 20px;
+  max-height: 100px;
+  width: 200px;
+}
+#vending-machine-delivery #product-dispense-container #product-dispense .product {
+  box-sizing: border-box;
+  display: inline-block;
+  background-color: #0f0;
+  height: 30px;
+  width: 30px;
+}
+.coin-hover {
+  border: 1px solid #f00;
+}
+.product-hover {
+  background-color: #FF6600 !important;
+}
+#penny {
+  background-color: #b87333;
+  border-radius: 15px;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+}
+#nickel {
+  background-color: #b5b6b5;
+  border-radius: 21px;
+  height: 42px;
+  line-height: 42px;
+  width: 42px;
+}
+#dime {
+  background-color: #C0C0C0;
+  border-radius: 18px;
+  height: 36px;
+  line-height: 36px;
+  width: 36px;
+}
+#quarter {
+  background-color: #C0C0C0;
+  border-radius: 24px;
+  height: 48px;
+  line-height: 48px;
+  width: 48px;
+}
+#slug {
+  background-color: #bbb;
+  border-radius: 20px;
+  height: 40px;
+  line-height: 40px;
+  width: 40px;
 }
