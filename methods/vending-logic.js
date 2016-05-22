@@ -1,7 +1,7 @@
 exports.hold = {
-    5 : 0,
-    10 : 0,
-    25 : 0
+    5 : 1,
+    10 : 2,
+    25 : 3
 };
 
 exports.checkWeight = function(coin){
@@ -74,12 +74,29 @@ exports.coinInserted = function(coin){
         //return coin
     }
     return rtn;
+};
 
+exports.getHoldValue = function(){
+    var keys,rtn;
+    rtn = false;
+    keys = Object.keys(exports.hold);
+    keys.forEach(
+        function(v,i,a){
+            var quant = exports.hold[v];
+            if (typeof quant === 'number'){
+                if(rtn === false){
+                    rtn = 0
+                }
+                rtn += quant * v;
 
+            }
+        }
+    );
+    return rtn;
+};
 
-
-
-
+exports.undoCoinInsert = function(coin){
+    exports.hold[coin.value_int] = exports.hold[coin.value_int] - 1;
 };
 
 

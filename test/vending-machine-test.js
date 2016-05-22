@@ -34,6 +34,7 @@ var fake = {
     "diameter" : "19"
 };
 
+
 describe("Vending Machine", function() {
     describe("weigh coins", function() {
         it("weighs coins", function() {
@@ -92,15 +93,32 @@ describe("Vending Machine", function() {
         });
     });*/
     describe("add coin to hold",function(){
+        var coin = nickel;
+        afterEach(function() {
+            machine.undoCoinInsert(coin);
+        });
+
         it("if coin inserted and valid, it should be added to hold, hold value for coin will increase by one", function(){
-            //working here , write test
-            var result1 = machine.coinInserted(nickel);
+            var result1 = machine.coinInserted(coin);
             var prev1 = result1.prev;
             var new_1 = result1.new_;
             var diff1 = (new_1-prev1);
             expect(diff1).to.equal(1);
         });
     });
+    describe("check hold value",function(){
+        it("checks total amount in hold, should return a number",function(){
+            var result = machine.getHoldValue();
+            var int = typeof result;
+            expect(int).to.equal('number');
+        });
+        it("checks total amount in hold, should not return NaN",function(){
+            var result = machine.getHoldValue();
+            var string = result.toString().trim();
+            expect(string).to.not.equal('NaN');
+        });
+    });
+
 
 
 
