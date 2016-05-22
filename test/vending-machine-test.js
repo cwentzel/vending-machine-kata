@@ -81,7 +81,7 @@ describe("Vending Machine", function() {
             expect(result5).to.deep.equal({result:false,value:false});
         });
     });
-    describe("check hold", function() {
+    /*describe("check hold", function() {
         it("should return a valid mongo object", function(){
             var result1 = database.checkHold(nickel);
             return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
@@ -90,14 +90,15 @@ describe("Vending Machine", function() {
             var result1 = database.checkHold(nickel);
             return expect(Promise.resolve(result1)).to.eventually.have.property("quantity");
         });
-    });
+    });*/
     describe("add coin to hold",function(){
-        it("if coin inserted and valid, it should be added to hold", function(){
+        it("if coin inserted and valid, it should be added to hold, hold value for coin will increase by one", function(){
             //working here , write test
-
-
-            var result1 = database.checkHold(nickel);
-            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
+            var result1 = machine.coinInserted(nickel);
+            var prev1 = result1.prev;
+            var new_1 = result1.new_;
+            var diff1 = (new_1-prev1);
+            expect(diff1).to.equal(1);
         });
     });
 

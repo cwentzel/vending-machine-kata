@@ -1,3 +1,9 @@
+exports.hold = {
+    5 : 0,
+    10 : 0,
+    25 : 0
+};
+
 exports.checkWeight = function(coin){
     var rtn = {};
     rtn.result = false;
@@ -50,21 +56,24 @@ exports.checkCoin = function(coin){
     return rtn;
 };
 
-/*
+
 exports.coinInserted = function(coin){
     var test,added;
-    var rtn = false;
+    var rtn ={};
+    rtn.result = false;
+    rtn.prev = false;
+    rtn.new_ = false;
     test = this.checkCoin(coin);
     if (test.result === true){
-        //add coin to bank
-        added = this.acceptCoin();
-        if (added === false){
-            //return coin
-        };
+        rtn.result = true;
+        rtn.prev = exports.hold[test.value];
+        exports.hold[test.value] += 1;
+        rtn.new_ = exports.hold[test.value];
     }
     else{
         //return coin
     }
+    return rtn;
 
 
 
@@ -72,6 +81,6 @@ exports.coinInserted = function(coin){
 
 
 };
-*/
+
 
 
