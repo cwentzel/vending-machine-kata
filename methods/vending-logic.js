@@ -1,8 +1,15 @@
+var database = require("../methods/db-logic.js");
+
 exports.hold = {
-    5 : 1,
-    10 : 2,
-    25 : 3
+    5 : 0,
+    10 : 0,
+    25 : 4
 };
+exports.bank = {};
+exports.product = {};
+exports.product.status = false;
+exports.product.code = false;
+exports.product.type = false;
 
 exports.checkWeight = function(coin){
     var rtn = {};
@@ -70,10 +77,11 @@ exports.coinInserted = function(coin){
         exports.hold[test.value] += 1;
         rtn.new_ = exports.hold[test.value];
     }
-    else{
-        //return coin
-    }
     return rtn;
+};
+
+exports.undoCoinInsert = function(coin){
+    exports.hold[coin.value_int] = exports.hold[coin.value_int] - 1;
 };
 
 exports.getHoldValue = function(){
@@ -88,16 +96,106 @@ exports.getHoldValue = function(){
                     rtn = 0
                 }
                 rtn += quant * v;
-
             }
         }
     );
     return rtn;
 };
 
-exports.undoCoinInsert = function(coin){
-    exports.hold[coin.value_int] = exports.hold[coin.value_int] - 1;
+exports.getNeededCoins = function(changeneeded,coinsinbank){
+    var rtn,lefttogive;
+    rtn = {};
+    rtn[25] = 0;
+    rtn[10] = 0;
+    rtn[5] = 0;
+    rtn.result = null;
+    rtn['25'] = Math.floor(changeneeded/25);
+    if (coinsinbank[25] < rtn['25']){
+        rtn['25'] = coinsinbank[25];
+    }
+    lefttogive = (changeneeded-(rtn['25']*25));
+    if (lefttogive != 0){
+        rtn['10'] = Math.floor(lefttogive/10);
+        if (coinsinbank[10] < rtn['10']){
+            rtn['10'] = coinsinbank[10];
+        }
+        lefttogive = (lefttogive-(rtn['10']*10));
+        if (lefttogive != 0){
+            rtn['5'] = Math.floor(lefttogive/5);
+            if (coinsinbank[5] < rtn['5']){
+                rtn['5'] = coinsinbank[5];
+            }
+            lefttogive = (lefttogive-(rtn['5']*5));
+        }
+    }
+    if (lefttogive == 0){
+        rtn.result = true;
+    }
+    else{
+        rtn.result = false;
+        rtn[25] = 0;
+        rtn[10] = 0;
+        rtn[5] = 0;
+    }
+    return rtn;
 };
+
+
+exports.dispenseProduct = function(request){
+    var prodRequest = database.getProduct(request);
+    var bank = database.getBank();
+    prodRequest.then(
+        function(doc){
+            console.log('____________________________');
+            if (doc){
+                var inserted = exports.getHoldValue();
+                if (inserted < doc.price){
+                    console.log('NOT ENOGU');
+                    exports.product.status = true;
+                    exports.product.message = 'PRICE '+doc.price;
+                    exports.product.type = false;
+                }
+                if (inserted == doc.price){
+                    console.log('JUST RIGHT');
+                    exports.product.status = true;
+                    exports.product.message = 'THANK YOU';
+                    exports.product.type = false;
+                }
+                if(inserted > doc.price){
+                    console.log('TOO MUCH');
+                    var bank = database.getBank();
+                    bank.then(function(coinsinbank){
+                        //console.log(inserted);
+                        //console.log(doc.price);
+                        var changeneeded = (inserted-doc.price);
+                        var coinsneeded = exports.getNeededCoins(changeneeded,coinsinbank);
+                        //determine change needed
+
+                        //compare to change avail
+                    })
+                }
+            }
+            else{
+
+            }
+        }
+    );
+    return prodRequest;
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
 
 
 

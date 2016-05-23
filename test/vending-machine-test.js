@@ -1,5 +1,6 @@
 var chai = require("chai");
 var expect = chai.expect;
+var should = chai.should();
 var chaiAsPromised = require("chai-as-promised");
 var machine = require("../methods/vending-logic.js");
 var database = require("../methods/db-logic.js");
@@ -116,6 +117,39 @@ describe("Vending Machine", function() {
             var result = machine.getHoldValue();
             var string = result.toString().trim();
             expect(string).to.not.equal('NaN');
+        });
+    });
+    describe("dispense product",function(){
+        it("checks if a product is returned by database if valid product request",function(){
+            var result1 = database.getProduct('candy');
+            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
+        });
+        it("checks if null is returned by database if valid product request",function(){
+            var result1 = database.getProduct('zfgtsdfg');
+            return expect(Promise.resolve(result1)).to.eventually.be.null;
+        });
+        it("checks if a product is returned by database if valid product request",function(){
+            var result1 = machine.dispenseProduct('candy');
+            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
+        });
+    });
+    describe("coin bank",function(){
+        it("checks to see if bank has an object for each coin",function(){
+            var result1 = database.getBank();
+            return expect(Promise.resolve(result1)).to.eventually.property("_id");
+        });
+    });
+    describe("make change",function(){
+        it("checks to see if correct amount of coins are found",function(){
+            var bank = {5:1,10:1,25:1};
+            var result1 = machine.getNeededCoins(35,bank);
+            var result2 = machine.getNeededCoins(70,bank);
+            var result3 = machine.getNeededCoins(105,bank);
+            var result4 = machine.getNeededCoins(15,bank);
+            expect(result1).to.deep.equal({25: 1,10: 1, 5: 0,result: true});
+            expect(result2).to.deep.equal({25: 0,10: 0, 5: 0,result: false});
+            expect(result3).to.deep.equal({25: 0,10: 0, 5: 0,result: false});
+            expect(result4).to.deep.equal({25: 0,10: 1, 5: 1,result: true});
         });
     });
 
