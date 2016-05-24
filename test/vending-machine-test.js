@@ -44,7 +44,6 @@ describe("Vending Machine", function() {
             var result3 = machine.checkWeight(quarter);
             var result4 = machine.checkWeight(fake);
             var result5 = machine.checkWeight("sldkcasd");
-
             expect(result1).to.deep.equal({result:true,value:5});
             expect(result2).to.deep.equal({result:true,value:10});
             expect(result3).to.deep.equal({result:true,value:25});
@@ -60,7 +59,6 @@ describe("Vending Machine", function() {
             var result3 = machine.checkDiameter(quarter);
             var result4 = machine.checkDiameter(fake);
             var result5 = machine.checkDiameter('sdfwe');
-
             expect(result1).to.deep.equal({result:true,value:5});
             expect(result2).to.deep.equal({result:true,value:10});
             expect(result3).to.deep.equal({result:true,value:25});
@@ -75,7 +73,6 @@ describe("Vending Machine", function() {
             var result3 = machine.checkCoin(quarter);
             var result4 = machine.checkCoin(fake);
             var result5 = machine.checkCoin('sdfwe');
-
             expect(result1).to.deep.equal({result:true,value:5});
             expect(result2).to.deep.equal({result:true,value:10});
             expect(result3).to.deep.equal({result:true,value:25});
@@ -83,22 +80,11 @@ describe("Vending Machine", function() {
             expect(result5).to.deep.equal({result:false,value:false});
         });
     });
-    /*describe("check hold", function() {
-        it("should return a valid mongo object", function(){
-            var result1 = database.checkHold(nickel);
-            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
-        });
-        it("should return an object with a quantity property", function(){
-            var result1 = database.checkHold(nickel);
-            return expect(Promise.resolve(result1)).to.eventually.have.property("quantity");
-        });
-    });*/
     describe("add coin to hold",function(){
         var coin = nickel;
         afterEach(function() {
             machine.undoCoinInsert(coin);
         });
-
         it("if coin inserted and valid, it should be added to hold, hold value for coin will increase by one", function(){
             var result1 = machine.coinInserted(coin);
             var prev1 = result1.prev;
@@ -120,10 +106,6 @@ describe("Vending Machine", function() {
         });
     });
     describe("dispense product",function(){
-        it("checks if a product is returned by database if valid product request",function(){
-            var result1 = database.getProduct('candy');
-            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
-        });
         it("checks if null is returned by database if valid product request",function(){
             var result1 = database.getProduct('zfgtsdfg');
             return expect(Promise.resolve(result1)).to.eventually.be.null;
@@ -136,7 +118,12 @@ describe("Vending Machine", function() {
     describe("coin bank",function(){
         it("checks to see if bank has an object for each coin",function(){
             var result1 = database.getBank();
-            return expect(Promise.resolve(result1)).to.eventually.property("_id");
+            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
+        });
+        it("checks to see if bank is updated properly",function(){
+            var obj = {25:1,10:1,5:1};
+            var result1 = database.updateBank(obj);
+            return expect(Promise.resolve(result1)).to.eventually.equal(1);
         });
     });
     describe("make change",function(){
@@ -152,9 +139,18 @@ describe("Vending Machine", function() {
             expect(result4).to.deep.equal({25: 0,10: 1, 5: 1,result: true});
         });
     });
-
-
-
-
-
+    describe('reset hold to zero', function() {
+        it('should reset money in hold to zero', function() {
+            machine.hold[25] = 1;
+            var result = machine.resetHold();
+            expect(result).to.deep.equal({25: 0,10: 0, 5: 0});
+        });
+    });
+    describe('reset hold to zero', function() {
+        it('should reset money in hold to zero', function() {
+            machine.hold[25] = 1;
+            var result = machine.resetHold();
+            expect(result).to.deep.equal({25: 0,10: 0, 5: 0});
+        });
+    });
 });

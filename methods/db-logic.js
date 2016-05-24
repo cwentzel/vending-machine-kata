@@ -15,6 +15,12 @@ exports.getBank = function(){
     return bank.findOne(query);
 };
 
-
-
-
+exports.updateBank = function(coinObj){
+    var bank = db.get('bank');
+    var query = {};
+    var settings = {
+        upsert: false,
+        multi: false
+    };
+    return bank.update({},coinObj,settings);
+};

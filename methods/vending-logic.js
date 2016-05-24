@@ -3,13 +3,14 @@ var database = require("../methods/db-logic.js");
 exports.hold = {
     5 : 0,
     10 : 0,
-    25 : 4
+    25 : 0
 };
 exports.bank = {};
 exports.product = {};
 exports.product.status = false;
 exports.product.code = false;
 exports.product.type = false;
+exports.product.change = false;
 
 exports.checkWeight = function(coin){
     var rtn = {};
@@ -140,50 +141,91 @@ exports.getNeededCoins = function(changeneeded,coinsinbank){
     return rtn;
 };
 
+exports.calcBankUpdate = function(coinsneeded,coinsinbank){
+    var rtn;
+    rtn = {};
+    rtn[25] = coinsinbank[25] - coinsneeded[25] + exports.hold[25];
+    rtn[10] = coinsinbank[10] - coinsneeded[10] + exports.hold[10];
+    rtn[5] = coinsinbank[5] - coinsneeded[5] + exports.hold[5];
+    return rtn;
+};
+
+//reset hold
+
+//substract stock
+
+//return coins from hold
 
 exports.dispenseProduct = function(request){
     var prodRequest = database.getProduct(request);
-    var bank = database.getBank();
     prodRequest.then(
-        function(doc){
-            console.log('____________________________');
-            if (doc){
+        function(doc) {
+            if (doc) {
                 var inserted = exports.getHoldValue();
-                if (inserted < doc.price){
-                    console.log('NOT ENOGU');
+                if (inserted < doc.price) {
                     exports.product.status = true;
-                    exports.product.message = 'PRICE '+doc.price;
+                    exports.product.message = 'PRICE ' + doc.price;
                     exports.product.type = false;
+                    exports.product.change = false;
                 }
-                if (inserted == doc.price){
-                    console.log('JUST RIGHT');
-                    exports.product.status = true;
-                    exports.product.message = 'THANK YOU';
-                    exports.product.type = false;
+                if (inserted == doc.price) {
+                    if (doc.stock > 0) {
+                        exports.product.status = true;
+                        exports.product.message = 'THANK YOU';
+                        exports.product.type = doc.type;
+                        exports.product.change = false;
+                    }
+                    else{
+                        exports.product.status = false;
+                        exports.product.message = 'SOLD OUT';
+                        exports.product.type = false;
+                        exports.product.change = false;
+                    }
                 }
-                if(inserted > doc.price){
-                    console.log('TOO MUCH');
-                    var bank = database.getBank();
-                    bank.then(function(coinsinbank){
-                        //console.log(inserted);
-                        //console.log(doc.price);
-                        var changeneeded = (inserted-doc.price);
-                        var coinsneeded = exports.getNeededCoins(changeneeded,coinsinbank);
-                        //determine change needed
-
-                        //compare to change avail
-                    })
+                if (inserted > doc.price) {
+                    if (doc.stock > 0){
+                        var bank = database.getBank();
+                        bank.then(function(coinsinbank) {
+                            var changeneeded = (inserted - doc.price);
+                            var coinsneeded = exports.getNeededCoins(changeneeded,coinsinbank);
+                            if (coinsneeded.result == true){
+                                var newvals = exports.calcBankUpdate(coinsneeded,coinsinbank);
+                                var update = database.updateBank(newvals);
+                                exports.product.status = true;
+                                exports.product.message = 'THANK YOU';
+                                exports.product.type = doc.type;
+                                exports.product.change = coinsneeded;
+                            }
+                            else{
+                                exports.product.status = false;
+                                exports.product.message = 'EXACT CHANGE ONLY';
+                                exports.product.type = false;
+                                exports.product.change = false;
+                            }
+                        });
+                    }
+                    else{
+                        exports.product.status = false;
+                        exports.product.message = 'SOLD OUT';
+                        exports.product.type = false;
+                        exports.product.change = false;
+                    }
                 }
             }
             else{
-
+                exports.product.status = false;
+                exports.product.message = 'OUT OF ORDER';
+                exports.product.type = false;
             }
-        }
-    );
+        });
     return prodRequest;
+};
 
-
-
+exports.resetHold = function(){
+    exports.hold[25] = 0;
+    exports.hold[10] = 0;
+    exports.hold[5] = 0;
+    return exports.hold;
 };
 
 
