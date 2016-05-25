@@ -150,7 +150,7 @@ exports.calcBankUpdate = function(coinsneeded,coinsinbank){
     return rtn;
 };
 
-//reset hold
+
 
 //substract stock
 

@@ -114,6 +114,11 @@ describe("Vending Machine", function() {
             var result1 = machine.dispenseProduct('candy');
             return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
         });
+
+
+
+
+
     });
     describe("coin bank",function(){
         it("checks to see if bank has an object for each coin",function(){
@@ -146,11 +151,11 @@ describe("Vending Machine", function() {
             expect(result).to.deep.equal({25: 0,10: 0, 5: 0});
         });
     });
-    describe('reset hold to zero', function() {
-        it('should reset money in hold to zero', function() {
-            machine.hold[25] = 1;
-            var result = machine.resetHold();
-            expect(result).to.deep.equal({25: 0,10: 0, 5: 0});
+    describe('check stock', function() {
+        it('checking stock should return an object with a stock property', function() {
+            var checkstock = database.getProduct('chips');
+            return expect(Promise.resolve(checkstock)).to.eventually.have.property('stock');
         });
     });
+
 });
