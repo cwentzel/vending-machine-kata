@@ -30,21 +30,12 @@ router.get(
     '/returncoins',
     function(req,res){
 
-
-
-
-    }
-);
-
-router.get(
-    'checkstatus',
-    function(req,res){
-
-
+    //write code to return coins from hold
 
 
     }
 );
+
 
 
 
