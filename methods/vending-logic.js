@@ -184,8 +184,7 @@ exports.removeCoinFromHold = function(val){
     exports.hold[val] = exports.hold[val]-1;
 };
 exports.returnCoins = function(){
-    exports.setStateChange(exports.hold);
-    exports.resetHold();
+    return exports.hold;
 };
 exports.resetHold = function(){
     var keys;
@@ -330,18 +329,28 @@ exports.getNeededCoins = function(changeneeded,coinsinbank){
 exports.dispenseProduct = function(prodStr) {
     var inserted, status, code, message, product, change, price, stock, bank, changeneeded, coinsneeded;
     exports.resetState();
+    console.log('KASDFASSSSSSSSSSSSSSSSSSSSS');
     inserted = exports.getHoldValue();
+    console.log(inserted);
     price = exports.getProductPrice(prodStr);
+    console.log(price);
     stock = exports.getProductStock(prodStr);
+    console.log(stock);
     bank = exports.getBank();
-    changeneeded = inserted - price;
+    console.log(bank);
+    changeneeded = 0;
+    if (inserted > price){
+        changeneeded = inserted - price;
+    }
+    console.log(changeneeded);
     coinsneeded = exports.getNeededCoins(changeneeded,bank);
+    console.log(coinsneeded);
     if (inserted < price) {
         status = false;
         code = 0;
         message = 'PRICE ' + price;
         product = false;
-        change = inserted;
+        change = exports.hold;
     }
     if (inserted == price) {
         if (stock > 0) {
@@ -353,35 +362,35 @@ exports.dispenseProduct = function(prodStr) {
         }
         else {
             status = false;
-            code = 1;
+            code = 3;
             message = 'SOLD OUT';
             product = false;
-            change = inserted;
+            change = exports.hold;
         }
     }
     if (inserted > price) {
         if (stock > 0) {
             if (coinsneeded.result == true) {
                 status = true;
-                code = 1;
+                code = 2;
                 message = 'THANK YOU';
                 product = prodStr;
                 change = coinsneeded;
             }
             else {
                 status = false;
-                code = 1;
+                code = 4;
                 message = 'EXACT CHANGE ONLY';
                 product = false;
-                change = inserted;
+                change = exports.hold;
             }
         }
         else {
             status = false;
-            code = 1;
+            code = 3;
             message = 'SOLD OUT';
             product = false;
-            change = inserted;
+            change = exports.hold;
         }
 
     }
@@ -392,9 +401,10 @@ exports.dispenseProduct = function(prodStr) {
     exports.setStateChange(change);
     if (status == true){
         var newvals = exports.calcBankUpdate(coinsneeded,bank);
-        var updatebank = exports.updateBank(newvals);
-        var adjuststock = exports.substractFromStock(prodStr);
-        var updateproduct = exports.updateProduct(prodStr);
+        exports.updateBank(newvals);
+        exports.resetHold();
+        exports.substractFromStock(prodStr);
+        exports.updateProduct(prodStr);
     }
 };
 
@@ -409,84 +419,4 @@ exports.undoProductUpdate = function(prodStr){
 exports.undoBankUpdate= function() {
     database.updateBank(exports.bank);
 };
-
-
-
-/*exports.dispenseProduct = function(request){
-    var prodRequest = database.getProduct(request);
-    prodRequest.then(
-        function(doc) {
-            if (doc) {
-                var inserted = exports.getHoldValue();
-                if (inserted < doc.price) {
-                    exports.product.status = true;
-                    exports.product.message = 'PRICE ' + doc.price;
-                    exports.product.type = false;
-                    exports.product.change = false;
-                }
-                if (inserted == doc.price) {
-                    if (doc.stock > 0) {
-                        exports.product.status = true;
-                        exports.product.message = 'THANK YOU';
-                        exports.product.type = doc.type;
-                        exports.product.change = false;
-                    }
-                    else{
-                        exports.product.status = false;
-                        exports.product.message = 'SOLD OUT';
-                        exports.product.type = false;
-                        exports.product.change = false;
-                    }
-                }
-                if (inserted > doc.price) {
-                    if (doc.stock > 0){
-                        var bank = database.getBank();
-                        bank.then(function(coinsinbank) {
-                            var changeneeded = (inserted - doc.price);
-                            var coinsneeded = exports.getNeededCoins(changeneeded,coinsinbank);
-                            if (coinsneeded.result == true){
-                                var newvals = exports.calcBankUpdate(coinsneeded,coinsinbank);
-                                var update = exports.updateBank(newvals);
-                                exports.product.status = true;
-                                exports.product.message = 'THANK YOU';
-                                exports.product.type = doc.type;
-                                exports.product.change = coinsneeded;
-                            }
-                            else{
-                                exports.product.status = false;
-                                exports.product.message = 'EXACT CHANGE ONLY';
-                                exports.product.type = false;
-                                exports.product.change = false;
-                            }
-                        });
-                    }
-                    else{
-                        exports.product.status = false;
-                        exports.product.message = 'SOLD OUT';
-                        exports.product.type = false;
-                        exports.product.change = false;
-                    }
-                }
-            }
-            else{
-                exports.product.status = false;
-                exports.product.message = 'OUT OF ORDER';
-                exports.product.type = false;
-            }
-        });
-    return prodRequest;
-};*/
-
-
-
-
-
-
-
-
-
-
-
-
-
 

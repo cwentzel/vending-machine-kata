@@ -21,6 +21,8 @@ router.post(
 router.post(
     '/selectproduct',
     function(req,res){
+        console.log('REQST_________________');
+        console.log(req.body.product);
         var product = machine.dispenseProduct(req.body.product);
         res.json(machine.state);
     }
@@ -29,10 +31,9 @@ router.post(
 router.get(
     '/returncoins',
     function(req,res){
-
-    //write code to return coins from hold
-
-
+        var holdobj = machine.returnCoins();
+        res.json(holdobj);
+        machine.resetHold();
     }
 );
 

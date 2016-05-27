@@ -5,11 +5,11 @@ block content
   p Welcome to #{title}
   #pocket.column
     label Pocket
-    #penny.coin(data-weight="3.1")(data-diameter="15") 1
-    #nickel.coin(data-weight="5")(data-diameter="21") 5
-    #dime.coin(data-weight="2.3")(data-diameter="18") 10
-    #quarter.coin(data-weight="5.7")(data-diameter="24") 25
-    #slug.coin(data-weight="3.9")(data-diameter="20") X
+    #penny.coin.penny(data-weight="3.1")(data-diameter="15") 1
+    #nickel.coin.nickel(data-weight="5")(data-diameter="21") 5
+    #dime.coin.dime(data-weight="2.3")(data-diameter="18") 10
+    #quarter.coin.quarter(data-weight="5.7")(data-diameter="24") 25
+    #slug.coin.slug(data-weight="3.9")(data-diameter="20") X
   #vending-machine.machine-container.column
     #vending-machine-display.machine-row
       #vending-display.machine-control.display Insert Coins
@@ -21,7 +21,7 @@ block content
     #vending-machine-product-select.machine-row
       #chips.machine-control.product-button(data-product="chips") CHIPS
       #candy.machine-control.product-button(data-product="candy") CANDY
-      #cola.machine-control.product-button(data-product="soda") COLA
+      #cola.machine-control.product-button(data-product="cola") COLA
     #vending-machine-delivery.machine-row
       #coin-return-container.machine-control
         label Coin Return

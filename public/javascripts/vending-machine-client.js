@@ -21,6 +21,7 @@ VendingMachineClient.product = function(type){
             class: 'product',
             html: type
         });
+    VendingMachineClient.makeProductDraggable(product);
     return product;
 };
 
@@ -35,6 +36,7 @@ VendingMachineClient.droppableCoinSlot = function(){
     $('#coin-slot').droppable({
         accept: '.coin',
         hoverClass: "coin-hover",
+        tolarance: "pointer",
         drop: function(e,ui){
             console.log('DROPPPPPp');
             var url = '/insertcoin';
@@ -90,7 +92,16 @@ VendingMachineClient.addListeners = function(){
     $('#return-coins').on(
         'click',
         function(){
-            console.log('return coins');
+            $.ajax({
+                type: "GET",
+                url: '/returncoins',
+                success: function(data){
+                    VendingMachineClient.makeChange(data);
+                },
+                error: function(data,status,err){
+
+                }
+            });
         }
     );
 
@@ -107,11 +118,15 @@ VendingMachineClient.addListeners = function(){
                 data: data,
                 success: function(data){
                     if (data.code == 0){
-
+                        //do nothing special
                     }
                     else if (data.code == 1){
                         VendingMachineClient.dispenseProduct(data.product);
                     }
+                    else if (data.code == 2){
+                        VendingMachineClient.dispenseProduct(data.product);
+                    }
+                    VendingMachineClient.makeChange(data.change);
                     VendingMachineClient.updateDisplay(data.message);
                     console.log(data);
                 },
@@ -121,6 +136,48 @@ VendingMachineClient.addListeners = function(){
             });
         }
     );
+};
+
+VendingMachineClient.makeCoin = function(val){
+    var _class = false;
+    if (val == 5){
+        _class = 'nickel';
+    }
+    else if (val == 10){
+        _class = 'dime';
+    }
+    else if (val == 25){
+        _class = 'nickel'
+    }
+    var coin = $('<div/>',{
+        class: 'coin '+ _class,
+        html: val
+    });
+    coin.draggable({
+        revert : 'invalid'
+    });
+    return coin;
+};
+
+
+
+VendingMachineClient.makeChange = function(coinobj){
+    console.log(coinobj);
+    var keys = Object.keys(coinobj);
+    console.log(keys);
+    var coinreturn = $('#coin-return');
+    keys.forEach(
+        function(v,i,a){
+            if (v != 'result'){
+                var coinset = coinobj[v];
+                for (i=0;i<coinset;i++){
+                    var coin = VendingMachineClient.makeCoin(v);
+                    coinreturn.append(coin);
+                    VendingMachineClient.updateDisplay('Insert Coins');
+                }
+            }
+        }
+    )
 };
 
 VendingMachineClient.makeProductDraggable = function(product){
@@ -143,8 +200,6 @@ VendingMachineClient.droppablePocket = function(){
 Money.init = function(){
     this.coins = $('.coin');
     this.draggableCoins(this.coins);
-
-
 };
 
 Money.draggableCoins = function(coins){
