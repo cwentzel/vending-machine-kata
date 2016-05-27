@@ -37,99 +37,96 @@ var fake = {
 
 
 describe("Vending Machine", function() {
-    describe("weigh coins", function() {
-        it("weighs coins", function() {
+    before(function(){
+        machine.initProducts();
+        machine.initBank();
+    });
+    describe("coin tests", function() {
+        it("weighs coins, value returned if valid", function() {
             var result1 = machine.checkWeight(nickel);
             var result2 = machine.checkWeight(dime);
             var result3 = machine.checkWeight(quarter);
             var result4 = machine.checkWeight(fake);
             var result5 = machine.checkWeight("sldkcasd");
-            expect(result1).to.deep.equal({result:true,value:5});
-            expect(result2).to.deep.equal({result:true,value:10});
-            expect(result3).to.deep.equal({result:true,value:25});
-            expect(result4).to.deep.equal({result:false,value:false});
-            expect(result5).to.deep.equal({result:false,value:false})
-
+            expect(result1).to.equal(5);
+            expect(result2).to.equal(10);
+            expect(result3).to.equal(25);
+            expect(result4).to.equal(false);
+            expect(result5).to.equal(false);
         });
-    });
-    describe("measure coins", function() {
-        it("measures coins", function() {
+        it("measures coins, value returned if valid", function() {
             var result1 = machine.checkDiameter(nickel);
             var result2 = machine.checkDiameter(dime);
             var result3 = machine.checkDiameter(quarter);
             var result4 = machine.checkDiameter(fake);
             var result5 = machine.checkDiameter('sdfwe');
-            expect(result1).to.deep.equal({result:true,value:5});
-            expect(result2).to.deep.equal({result:true,value:10});
-            expect(result3).to.deep.equal({result:true,value:25});
-            expect(result4).to.deep.equal({result:false,value:false});
-            expect(result5).to.deep.equal({result:false,value:false});
+            expect(result1).to.equal(5);
+            expect(result2).to.equal(10);
+            expect(result3).to.equal(25);
+            expect(result4).to.equal(false);
+            expect(result5).to.equal(false);
         });
-    });
-    describe("test coins", function() {
-        it("tests coins", function() {
+        it("tests coins, value returned if valid", function() {
             var result1 = machine.checkCoin(nickel);
             var result2 = machine.checkCoin(dime);
             var result3 = machine.checkCoin(quarter);
             var result4 = machine.checkCoin(fake);
-            var result5 = machine.checkCoin('sdfwe');
-            expect(result1).to.deep.equal({result:true,value:5});
-            expect(result2).to.deep.equal({result:true,value:10});
-            expect(result3).to.deep.equal({result:true,value:25});
-            expect(result4).to.deep.equal({result:false,value:false});
-            expect(result5).to.deep.equal({result:false,value:false});
+            var result5 = machine.checkCoin('dxsfgsdfg');
+            expect(result1).to.equal(5);
+            expect(result2).to.equal(10);
+            expect(result3).to.equal(25);
+            expect(result4).to.equal(false);
+            expect(result5).to.equal(false);
         });
     });
-    describe("add coin to hold",function(){
-        var coin = nickel;
-        afterEach(function() {
-            machine.undoCoinInsert(coin);
-        });
-        it("if coin inserted and valid, it should be added to hold, hold value for coin will increase by one", function(){
-            var result1 = machine.coinInserted(coin);
-            var prev1 = result1.prev;
-            var new_1 = result1.new_;
-            var diff1 = (new_1-prev1);
-            expect(diff1).to.equal(1);
-        });
-    });
-    describe("check hold value",function(){
-        it("checks total amount in hold, should return a number",function(){
-            var result = machine.getHoldValue();
-            var int = typeof result;
-            expect(int).to.equal('number');
-        });
-        it("checks total amount in hold, should not return NaN",function(){
-            var result = machine.getHoldValue();
-            var string = result.toString().trim();
-            expect(string).to.not.equal('NaN');
-        });
-    });
-    describe("dispense product",function(){
-        it("checks if null is returned by database if valid product request",function(){
-            var result1 = database.getProduct('zfgtsdfg');
-            return expect(Promise.resolve(result1)).to.eventually.be.null;
-        });
-        it("checks if a product is returned by database if valid product request",function(){
-            var result1 = machine.dispenseProduct('candy');
-            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
-        });
-
-
-
-
-
-    });
-    describe("coin bank",function(){
-        it("checks to see if bank has an object for each coin",function(){
+    describe("tests database",function(){
+        it("when bank it retrieved, it returns a valid bank object",function(){
             var result1 = database.getBank();
-            return expect(Promise.resolve(result1)).to.eventually.have.property("_id");
+            return expect(Promise.resolve(result1)).to.eventually.have.length(1);
         });
-        it("checks to see if bank is updated properly",function(){
-            var obj = {25:1,10:1,5:1};
-            var result1 = database.updateBank(obj);
+        it("when products are retrieved, it returns a valid array with length of 3",function(){
+            var result1 = database.getProducts();
+            return expect(Promise.resolve(result1)).to.eventually.have.length(3);
+        });
+        it("when a product is updated, it checks to see if a 1 is return by update function",function(){
+            var prod = 'chips';
+            var original = machine.products[prod];
+            var test_product = {
+                type : 'chips',
+                price : '50',
+                stock : '10'
+            };
+            after(function() {
+                database.updateProduct(original);
+            });
+            var result1 = database.updateProduct(test_product);
             return expect(Promise.resolve(result1)).to.eventually.equal(1);
         });
+        it("when products are retrieved, it..................",function(){
+            var bank = {
+                '25': 66,
+                '10': 66,
+                '5': 66
+            };
+            before(function(){
+                machine.initBank();
+                });
+            after(function() {
+                machine.undoBankUpdate();
+            });
+            var result1 = database.updateBank(bank);
+            return expect(Promise.resolve(result1)).to.eventually.equal(1);
+        });
+    });
+    describe("coin inserted",function(){
+       it("when a coin is inserted, it is checked and added to hold if valid coin",function(){
+           var coin = nickel;
+           var result1 = machine.coinInserted(coin);
+           after(function(){
+               machine.removeCoinFromHold(coin.value_int);
+           });
+           expect(machine.hold[coin.value_int]).to.equal(1);
+       });
     });
     describe("make change",function(){
         it("checks to see if correct amount of coins are found",function(){
@@ -144,18 +141,57 @@ describe("Vending Machine", function() {
             expect(result4).to.deep.equal({25: 0,10: 1, 5: 1,result: true});
         });
     });
-    describe('reset hold to zero', function() {
-        it('should reset money in hold to zero', function() {
-            machine.hold[25] = 1;
+    describe('product methods', function() {
+        var prod = 'candy';
+        it('when getProduct() called, a product is returned',function(){
+            var result = machine.getProduct(prod);
+            expect(result).to.have.property('type');
+            expect(result).to.have.property('price');
+            expect(result).to.have.property('stock');
+        });
+        it('when getProductStock() called, a number is returned', function() {
+            var result = machine.getProductStock(prod);
+            expect(result).to.be.a('number');
+        });
+        it('when getProductPrice() called, a number is returned', function() {
+            var result = machine.getProductPrice(prod);
+            expect(result).to.be.a('number');
+        });
+        it('when substractFromStock() called, stock is reduced', function() {
+            var stockBefore = machine.getProductStock(prod);
+            var test = machine.substractFromStock(prod);
+            var stockAfter = machine.getProductStock(prod);
+            var result = (parseInt(stockBefore) - parseInt(stockAfter));
+            expect(result).to.equal(1);
+        });
+    });
+    describe("hold object methods",function(){
+        var coin = nickel;
+        beforeEach(function(){
+            machine.hold = {5:2,10:2,25:2};
+        });
+        afterEach(function(){
+            machine.resetHold();
+        });
+        it("when get hold value called, a number is returned",function(){
+            var result = machine.getHoldValue();
+            expect(result).to.be.a('number');
+        });
+        it("when resetHold is called, values in hold are reset to zero",function(){
             var result = machine.resetHold();
-            expect(result).to.deep.equal({25: 0,10: 0, 5: 0});
+            expect(machine.hold).to.deep.equal({25: 0,10: 0, 5: 0});
+        });
+        it("when a coin is added to hold, the hold value for that coin is increased by one",function(){
+            var before = machine.hold[coin.value_int];
+            var result = machine.addCoinToHold(coin.value_int);
+            var after = machine.hold[coin.value_int];
+            expect(after-before).to.equal(1);
+        });
+        it("when a coin is substract from hold, the hold value for that coin is decreased by one",function(){
+            var before = machine.hold[coin.value_int];
+            var result = machine.removeCoinFromHold(coin.value_int);
+            var after = machine.hold[coin.value_int];
+            expect(before-after).to.equal(1);
         });
     });
-    describe('check stock', function() {
-        it('checking stock should return an object with a stock property', function() {
-            var checkstock = database.getProduct('chips');
-            return expect(Promise.resolve(checkstock)).to.eventually.have.property('stock');
-        });
-    });
-
 });
