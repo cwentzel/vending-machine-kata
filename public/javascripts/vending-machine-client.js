@@ -38,7 +38,6 @@ VendingMachineClient.droppableCoinSlot = function(){
         hoverClass: "coin-hover",
         tolarance: "pointer",
         drop: function(e,ui){
-            console.log('DROPPPPPp');
             var url = '/insertcoin';
             var data = {};
             data.weight = ui.draggable.attr('data-weight');
@@ -48,13 +47,10 @@ VendingMachineClient.droppableCoinSlot = function(){
                 url: url,
                 data: data,
                 success: function(data){
-                    console.log(data);
                     if (data.value != false){
-                        console.log("GOOD");
                         VendingMachineClient.updateDisplay(data.message);
                     }
                     else{
-                        console.log('BAD');
                         VendingMachineClient.returnCoin(ui.draggable);
                     }
                 },
@@ -81,8 +77,6 @@ VendingMachineClient.droppableBackpack = function(){
         accept: '.product',
         hoverClass: "product-hover",
         drop: function(e,ui ){
-            console.log(e);
-            console.log(ui);
         },
     });
 };
@@ -128,7 +122,6 @@ VendingMachineClient.addListeners = function(){
                     }
                     VendingMachineClient.makeChange(data.change);
                     VendingMachineClient.updateDisplay(data.message);
-                    console.log(data);
                 },
                 error: function(data,status,err){
 
@@ -159,12 +152,8 @@ VendingMachineClient.makeCoin = function(val){
     return coin;
 };
 
-
-
 VendingMachineClient.makeChange = function(coinobj){
-    console.log(coinobj);
     var keys = Object.keys(coinobj);
-    console.log(keys);
     var coinreturn = $('#coin-return');
     keys.forEach(
         function(v,i,a){

@@ -205,7 +205,6 @@ exports.getHoldValue = function(){
                 if(rtn === false){
                     rtn = 0
                 }
-                console.log(rtn);
                 rtn += exports.hold[v] * v;
             }
         }
@@ -329,22 +328,15 @@ exports.getNeededCoins = function(changeneeded,coinsinbank){
 exports.dispenseProduct = function(prodStr) {
     var inserted, status, code, message, product, change, price, stock, bank, changeneeded, coinsneeded;
     exports.resetState();
-    console.log('KASDFASSSSSSSSSSSSSSSSSSSSS');
     inserted = exports.getHoldValue();
-    console.log(inserted);
     price = exports.getProductPrice(prodStr);
-    console.log(price);
     stock = exports.getProductStock(prodStr);
-    console.log(stock);
     bank = exports.getBank();
-    console.log(bank);
     changeneeded = 0;
     if (inserted > price){
         changeneeded = inserted - price;
     }
-    console.log(changeneeded);
     coinsneeded = exports.getNeededCoins(changeneeded,bank);
-    console.log(coinsneeded);
     if (inserted < price) {
         status = false;
         code = 0;
@@ -411,8 +403,6 @@ exports.dispenseProduct = function(prodStr) {
 
 //UNDO tests
 exports.undoProductUpdate = function(prodStr){
-    console.log('gggggggggggggggggggggggggggggggggggggggggggggggg');
-    console.log(exports.products[prodStr]);
     database.updateProduct(exports.products[prodStr]);
 };
 

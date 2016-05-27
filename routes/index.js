@@ -21,8 +21,6 @@ router.post(
 router.post(
     '/selectproduct',
     function(req,res){
-        console.log('REQST_________________');
-        console.log(req.body.product);
         var product = machine.dispenseProduct(req.body.product);
         res.json(machine.state);
     }
